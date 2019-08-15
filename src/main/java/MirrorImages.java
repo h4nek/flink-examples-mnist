@@ -39,51 +39,15 @@ public class MirrorImages {
 //        System.out.println("Date of File: " + new Date(mnistInputHandler.getStatistics(null).getLastModificationTime())); // TEST -- Mon Nov 18 16:36:26 CET 1996
 //
 //        System.out.println("read all elements? : " + mnistInputHandler.reachedEnd());   //TEST
-        
-        
-//        System.out.println(matrices.count()); // TESTING -- 720 000 | should be 60 000?; probably because of parallelism 12...
-//        matrices.first(60000).print();
-//        matrices.print();
-        DataSet<byte[]> mirrors = matrices.map(new MirrorImageMap(mnistInputHandler.getNumRows(), mnistInputHandler.getNumCols()));
-//        List<byte[]> mirrorsList = mirrors.collect();
-//        System.out.println(mirrorsList.size());
 
-        /*Demonstrating that the mirroring works.*/
-//        byte[] firstMatrix = matrices.collect().get(0);
-//        for (int i = 0; i < mnistInputHandler.getNumRows(); ++i) {
-//            for (int j = 0; j < mnistInputHandler.getNumCols(); ++j) {
-//                System.out.print(firstMatrix[i*mnistInputHandler.getNumCols() + j] + " ");
-//            }
-//            System.out.println();
-//        }
-//        byte[] firstMirror = mirrorsList.get(0);
-//        for (int i = 0; i < mnistInputHandler.getNumRows(); ++i) {
-//            for (int j = 0; j < mnistInputHandler.getNumCols(); ++j) {
-//                System.out.print(firstMirror[i*mnistInputHandler.getNumCols() + j] + " ");
-//            }
-//            System.out.println();
-//        }
+        int numRows = mnistInputHandler.getNumRows();
+        int numCols = mnistInputHandler.getNumCols();
         
-//        for (byte[] matrix : mirrorsList) {
-//            for (int i =0; i < matrix.length; ++i) {
-//                System.out.print(matrix[i]);
-//            }
-//            System.out.println();
-//        }
-
-//        int numRows = mnistInputHandler.getNumRows();
-//        int numCols = mnistInputHandler.getNumCols();
-//        
-//        DataSet<byte[]> mirrors = matrices.map(new MirrorImageMap(numRows, numCols));
-//       
+        DataSet<byte[]> mirrors = matrices.map(new MirrorImageMap(numRows, numCols));
+        
         String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputMirrors\\";
-//        mirrors.write(new PngFileOutputFormat(mnistInputHandler.getNumCols(), 
-//                                              mnistInputHandler.getNumRows(), "mirror"), 
-//                      outputPath /*"output/outputMirrors"*/);
-        mirrors.output(new PngOutputFormat<>(outputPath,
-                                             "mirror",
-                                             mnistInputHandler.getNumCols(),
-                                             mnistInputHandler.getNumRows()));
+        mirrors.output(new PngOutputFormat<>(outputPath,"mirror", numCols, numRows));
+        
         env.execute();
         
         /* A working implementation using non-Flink I/O. */
@@ -109,20 +73,14 @@ class MirrorImageMap implements MapFunction<byte[], byte[]> {
     
     private int height;
     private int width;
-//    MNISTFileInputFormat mnistFileInputFormat;
     
     MirrorImageMap(int height, int width) { // we need to pass and store additional (invariant) information
-//        this.mnistFileInputFormat = mnistFileInputFormat;
-//        this.height = mnistFileInputFormat.getNumRows();
-//        this.width = mnistFileInputFormat.getNumCols();
-//        System.out.println("the width is: " + width + "\nthe height is: " + height);
         this.height = height;
         this.width = width;
     }
     
     @Override
     public byte[] map(byte[] image) throws Exception {
-//        System.out.println("the width is: " + width + "\nthe height is: " + height);
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width/2; j++) { // we'll only iterate over the left part of the image, swapping it with the right part
                 // generally, if the width is even, then we iterate over exactly half of the matrix elements
@@ -134,7 +92,6 @@ class MirrorImageMap implements MapFunction<byte[], byte[]> {
                 image[mirrorPos] = pixel; // finally, replace the other element with the stored one
             }
         }
-//        System.out.flush();
         return image;
     }
 }

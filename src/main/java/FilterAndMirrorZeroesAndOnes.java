@@ -28,7 +28,6 @@ public class FilterAndMirrorZeroesAndOnes {
         DataSet<byte[]> mirroredOnes = ones.map(mirrorFunction);
         
         DataSet<byte[]> mirroredZeroesAndOnes = mirroredZeroes.union(mirroredOnes);
-//        System.out.println(mirroredZeroesAndOnes.collect().size()); //TEST -- 12665
         String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputMirroredZeroesAndOnes\\";
         mirroredZeroesAndOnes.output(new PngOutputFormat<>(outputPath, "mirroredZeroOrOne",
                                                         imagesHandler.getNumCols(), imagesHandler.getNumRows()));

@@ -30,7 +30,6 @@ public class PngOutputFormat<T> extends RichOutputFormat<T> {
         this.numCols = numCols;
         this.numRows = numRows;
         numFile = new AtomicInteger();
-//        System.out.println("Im in the png constructor!"); //TEST -- called only once
     }
 
     @Override
@@ -42,10 +41,6 @@ public class PngOutputFormat<T> extends RichOutputFormat<T> {
     public void open(int taskNumber, int numTasks) throws IOException {
         image = new BufferedImage(numCols, numRows, BufferedImage.TYPE_BYTE_GRAY);
         raster = image.getRaster();
-
-        System.out.println("output directory path: " + directoryPath);
-        System.out.println("task number:" + taskNumber);
-        System.out.println("num tasks: " + numTasks);   //TEST -- 12
         
         new File(directoryPath).mkdirs();  // make any directories that don't exist
     }
@@ -59,10 +54,6 @@ public class PngOutputFormat<T> extends RichOutputFormat<T> {
         image.setData(raster);
         
         File outputFile = new File(filePath);
-
-
-//        System.out.println("Writing image nr. " + numImage);
-//        System.out.println("current output path: " + filePath);
         
         ImageIO.write(image, "png", outputFile);
         System.out.println("Image nr. " + numImage + " written!");

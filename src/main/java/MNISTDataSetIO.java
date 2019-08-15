@@ -37,8 +37,6 @@ public class MNISTDataSetIO {
             is.read(integerNum);
             int numCols = buffer.getInt(0);
             
-//            System.out.println(String.valueOf(numImages) + numRows + numCols);
-            
             for (int i = 0; i < numImages; ++i) {   // read the images one by one
                 byte[] matrix = new byte[numRows*numCols];
                 is.read(matrix); // read all the bytes filling the matrix

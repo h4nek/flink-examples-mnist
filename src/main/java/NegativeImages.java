@@ -33,11 +33,6 @@ public class NegativeImages {
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
 		// create the stream of matrices represented as a DataSet (bounded set of elements)
-//        MNISTDataSetIO mnistDataSetIO = new MNISTDataSetIO();
-//        AtomicInteger width = new AtomicInteger();
-//        AtomicInteger height = new AtomicInteger();
-//        DataSet<byte[]>  matrices = env.fromCollection(
-//                mnistDataSetIO.readIDX("input/train-images.idx3-ubyte", width, height));
         String imagesPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte";
         MNISTFileInputFormat mnistHandler = new MNISTFileInputFormat(imagesPath);
 		DataSet<byte[]> matrices = env.readFile(mnistHandler, imagesPath);
@@ -46,13 +41,9 @@ public class NegativeImages {
         DataSet<byte[]> negativesStream = matrices.map(new NegateImageMap());
         
         // save the negatives in the specified path
-//        mnistDataSetIO.saveImages("output/outputNegatives", "negative", negatives, 
-//                height.get(), width.get());
         String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputNegatives\\";
         negativesStream.output(new PngOutputFormat<>(outputPath, "negative", 
                                mnistHandler.getNumCols(), mnistHandler.getNumRows()));
-        
-        //matrices.write();
         
 		// execute program
 		env.execute("Turn MNIST Images into Negatives");
