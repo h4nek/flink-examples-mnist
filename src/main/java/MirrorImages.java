@@ -2,10 +2,9 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.core.fs.Path;
 
-import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,13 +13,11 @@ public class MirrorImages {
     public static void main(String[] args) throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-//        URL resource = MirrorImages.class.getResource("input/train-images.idx3-ubyte");
-//        File file = new File(MirrorImages.class.getResource("input/train-images.idx3-ubyte").toURI());  //the path: /D:/Programy/BachelorThesis/Tests/JavaApacheFlink/MNIST_Database/target/classes/input/train-images.idx3-ubyte
-        String filePath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte";
+        URL url = MirrorImages.class.getResource("input/train-images.idx3-ubyte");
+        String filePath = url.getPath();    // "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte"
+        
         MNISTFileInputFormat mnistInputHandler = new MNISTFileInputFormat(filePath);
-        DataSet<byte[]> matrices = env.readFile(mnistInputHandler, 
-//                MirrorImages.class.getResource("input/train-images.idx3-ubyte").toURI().toString());
-                filePath);
+        DataSet<byte[]> matrices = env.readFile(mnistInputHandler, filePath);
         
         /*Printing some info about the source.*/
 //        System.out.println("num of input files: " + mnistInputHandler.getFilePaths().length);// TEST -- 1 | the file is apparently set by the readFile() function
@@ -45,9 +42,9 @@ public class MirrorImages {
         
         DataSet<byte[]> mirrors = matrices.map(new MirrorImageMap(numRows, numCols));
         
-        String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputMirrors\\";
+        String outputPath = System.getProperty("user.dir") + "\\output\\outputMirrors\\";
         mirrors.output(new PngOutputFormat<>(outputPath,"mirror", numCols, numRows));
-        
+
         env.execute();
         
         /* A working implementation using non-Flink I/O. */

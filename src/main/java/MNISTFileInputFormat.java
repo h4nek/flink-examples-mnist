@@ -68,10 +68,9 @@ public class MNISTFileInputFormat extends FileInputFormat<byte[]> {
         if (reuse == null || reuse.length == 0) {
             reuse = new byte[numRows*numCols];
         }
-        
         ++numRead;
         stream.read(reuse); // read all the bytes filling the matrix
-        
+        System.out.println("Image nr. " + numRead + " read.");
         return reuse;
     }
 

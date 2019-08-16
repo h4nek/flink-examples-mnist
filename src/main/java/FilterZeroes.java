@@ -5,8 +5,8 @@ import org.apache.flink.api.java.functions.KeySelector;
 public class FilterZeroes {
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        String imagesPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte";
-        String labelsPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-labels.idx1-ubyte";
+        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String labelsPath = MirrorImages.class.getResource("input/train-labels.idx1-ubyte").getPath();
         MNISTFileInputFormat imagesHandler = new MNISTFileInputFormat(imagesPath);
         DataSet<byte[]> images = env.readFile(imagesHandler, imagesPath).setParallelism(1);
         DataSet<byte[]> labels = env.readFile(new MNISTFileInputFormat(labelsPath), labelsPath).setParallelism(1);
@@ -17,7 +17,7 @@ public class FilterZeroes {
                 .filter(x -> x.f1[0] == 0)    // filter only images representing a '0'
                 .map(x -> x.f0);  // get rid of the labels
 
-        String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputZeroes\\";
+        String outputPath = System.getProperty("user.dir") + "\\output\\outputZeroes\\";
         zeroes.output(new PngOutputFormat<>(outputPath, "zero", imagesHandler.getNumCols(), imagesHandler.getNumRows()));
         env.execute("Filter Images of Zeroes");
     }

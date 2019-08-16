@@ -20,9 +20,6 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * A Flink application that creates negatives of the MNIST database images using the DataSet class.
  */
@@ -33,7 +30,7 @@ public class NegativeImages {
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
 		// create the stream of matrices represented as a DataSet (bounded set of elements)
-        String imagesPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte";
+        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
         MNISTFileInputFormat mnistHandler = new MNISTFileInputFormat(imagesPath);
 		DataSet<byte[]> matrices = env.readFile(mnistHandler, imagesPath);
 		
@@ -41,7 +38,7 @@ public class NegativeImages {
         DataSet<byte[]> negativesStream = matrices.map(new NegateImageMap());
         
         // save the negatives in the specified path
-        String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputNegatives\\";
+        String outputPath = System.getProperty("user.dir") + "\\output\\outputNegatives\\";
         negativesStream.output(new PngOutputFormat<>(outputPath, "negative", 
                                mnistHandler.getNumCols(), mnistHandler.getNumRows()));
         

@@ -8,8 +8,8 @@ import org.apache.flink.api.java.tuple.Tuple2;
 public class FilterAndMirrorZeroesAndOnes {
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        String imagesPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte";
-        String labelsPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-labels.idx1-ubyte";
+        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String labelsPath = MirrorImages.class.getResource("input/train-labels.idx1-ubyte").getPath();
         MNISTFileInputFormat imagesHandler = new MNISTFileInputFormat(imagesPath);
 
         DataSet<byte[]> images = env.readFile(imagesHandler, imagesPath);
@@ -28,7 +28,7 @@ public class FilterAndMirrorZeroesAndOnes {
         DataSet<byte[]> mirroredOnes = ones.map(mirrorFunction);
         
         DataSet<byte[]> mirroredZeroesAndOnes = mirroredZeroes.union(mirroredOnes);
-        String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputMirroredZeroesAndOnes\\";
+        String outputPath = System.getProperty("user.dir") + "\\output\\outputMirroredZeroesAndOnes\\";
         mirroredZeroesAndOnes.output(new PngOutputFormat<>(outputPath, "mirroredZeroOrOne",
                                                         imagesHandler.getNumCols(), imagesHandler.getNumRows()));
         

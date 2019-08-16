@@ -6,8 +6,8 @@ public class FilterOnes {
     public static void main(String[] args) throws Exception {
         /*Set up the environment*/
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        String imagesPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-images.idx3-ubyte";
-        String labelsPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\src\\main\\resources\\input\\train-labels.idx1-ubyte";
+        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String labelsPath = MirrorImages.class.getResource("input/train-labels.idx1-ubyte").getPath();
         MNISTFileInputFormat imagesHandler = new MNISTFileInputFormat(imagesPath);
         
         /*Initialize the DataSets from source files*/
@@ -18,7 +18,7 @@ public class FilterOnes {
         DataSet<byte[]> ones = images.join(labels).where(new SelectIndex()).equalTo(new SelectIndex()).filter(x -> x.f1[0] == 1).map(x -> x.f0);
         
         /*Write the DataSets into output files through sinks*/
-        String outputPath = "D:\\Programy\\BachelorThesis\\Tests\\JavaApacheFlink\\MNIST_Database\\output\\outputOnes\\";
+        String outputPath = System.getProperty("user.dir") + "\\output\\outputOnes\\";
         ones.output(new PngOutputFormat<>(outputPath, "one", imagesHandler.getNumCols(), imagesHandler.getNumRows()));
         
         /*Execute the Flink job*/
