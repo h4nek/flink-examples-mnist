@@ -8,8 +8,8 @@ import org.apache.flink.api.java.tuple.Tuple2;
 public class FilterAndMirrorZeroesAndOnes {
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
-        String labelsPath = MirrorImages.class.getResource("input/train-labels.idx1-ubyte").getPath();
+        String imagesPath = FilterAndMirrorZeroesAndOnes.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String labelsPath = FilterAndMirrorZeroesAndOnes.class.getResource("input/train-labels.idx1-ubyte").getPath();
         MNISTFileInputFormat imagesHandler = new MNISTFileInputFormat(imagesPath);
 
         DataSet<byte[]> images = env.readFile(imagesHandler, imagesPath);

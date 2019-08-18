@@ -5,11 +5,11 @@ import org.apache.flink.api.java.functions.KeySelector;
 public class FilterZeroes {
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
-        String labelsPath = MirrorImages.class.getResource("input/train-labels.idx1-ubyte").getPath();
+        String imagesPath = FilterZeroes.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String labelsPath = FilterZeroes.class.getResource("input/train-labels.idx1-ubyte").getPath();
         MNISTFileInputFormat imagesHandler = new MNISTFileInputFormat(imagesPath);
-        DataSet<byte[]> images = env.readFile(imagesHandler, imagesPath).setParallelism(1);
-        DataSet<byte[]> labels = env.readFile(new MNISTFileInputFormat(labelsPath), labelsPath).setParallelism(1);
+        DataSet<byte[]> images = env.readFile(imagesHandler, imagesPath);
+        DataSet<byte[]> labels = env.readFile(new MNISTFileInputFormat(labelsPath), labelsPath);
         
         DataSet<byte[]> zeroes = images.join(labels)
                 .where(new SelectIndex())

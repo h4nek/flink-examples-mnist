@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A more generic output format for outputing each element into a separate PNG file.
+ * A more generic output format for outputting each element into a separate PNG file.
  * The type of elements is generic even though we'll only use it on byte[] images.
  * @param <T>
  */

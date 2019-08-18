@@ -6,8 +6,8 @@ public class FilterOnes {
     public static void main(String[] args) throws Exception {
         /*Set up the environment*/
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
-        String labelsPath = MirrorImages.class.getResource("input/train-labels.idx1-ubyte").getPath();
+        String imagesPath = FilterOnes.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String labelsPath = FilterOnes.class.getResource("input/train-labels.idx1-ubyte").getPath();
         MNISTFileInputFormat imagesHandler = new MNISTFileInputFormat(imagesPath);
         
         /*Initialize the DataSets from source files*/

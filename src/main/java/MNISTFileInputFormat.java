@@ -70,7 +70,10 @@ public class MNISTFileInputFormat extends FileInputFormat<byte[]> {
         }
         ++numRead;
         stream.read(reuse); // read all the bytes filling the matrix
-        System.out.println("Image nr. " + numRead + " read.");
+        if (numDims == 3)
+            System.out.println("Image nr. " + numRead + " read.");
+        else
+            System.out.println("Label nr. " + numRead + " read.");
         return reuse;
     }
 

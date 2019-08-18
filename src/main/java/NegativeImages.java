@@ -30,7 +30,7 @@ public class NegativeImages {
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
 		// create the stream of matrices represented as a DataSet (bounded set of elements)
-        String imagesPath = MirrorImages.class.getResource("input/train-images.idx3-ubyte").getPath();
+        String imagesPath = NegativeImages.class.getResource("input/train-images.idx3-ubyte").getPath();
         MNISTFileInputFormat mnistHandler = new MNISTFileInputFormat(imagesPath);
 		DataSet<byte[]> matrices = env.readFile(mnistHandler, imagesPath);
 		
